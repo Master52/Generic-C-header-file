@@ -254,6 +254,7 @@ void Llist_unique( LinkedList *list) {
 	
 }
 
-void* head(LinkedList *list) {
-	return(list->head);
+//returns the pointer to the head of the node so to iterate over the list
+void* Llist_front(LinkedList *list) {
+	return((list->head)->data);
 }
