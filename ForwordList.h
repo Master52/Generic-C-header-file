@@ -37,6 +37,7 @@ int Llist_isEmpty(LinkedList *list){
 //A Generic swap function
 void static swap(struct node *prev,struct node *after,int size) {
 	void *temp = malloc(size);
+	assert(temp != NULL);
 	memcpy(temp,prev->data,size);
 	memcpy(prev->data,after->data,size);
 	memcpy(after->data,temp,size);
@@ -60,6 +61,7 @@ static struct node* search(struct node **walk,int size,void *data){
 }
 //Creating a linked list
 void Llist_create(LinkedList *list,int type) {
+	assert(type > 0);
 	list->size = type;
 	list->count = 0;
 	list->head = NULL;
@@ -129,6 +131,7 @@ void* Llist_head(LinkedList *list) {
 
 void Llist_push_front(LinkedList *list,void *data) {
 	struct node *attach = malloc(sizeof(struct node));
+	assert(attach != NULL);
 	attach->data = malloc(list->size);
 	memcpy(attach->data,data,list->size);
 	attach->next = list->head;
@@ -147,6 +150,7 @@ void Llist_insert_after(LinkedList *list,const int loc,void *data) {
 	for(int i=0 ; i<loc ;i++)
 		walk = (walk->next);
 	struct node *attach = malloc(sizeof(struct node));
+	assert(attach != NULL);
 	attach->data = malloc(sizeof(list->size));
 	memcpy(attach->data,data,list->size);
 	attach->next = (walk)->next;

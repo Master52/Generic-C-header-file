@@ -63,4 +63,22 @@ void StackPop(Stack *s,void *value) {
 	s->logical_length --;
 }
 
+//Return a pointer which points to starting address of the top element
+void* Stack_top(Stack *s) {
+	void *source = (char*)s->ele_size + (s->logical_length-1) * s->size;
+	return source;
+}
+
+//Return 1(true) if the stack is empty
+int  Stack_isEmpty(Stack *s) {
+	if(s->logical_length == 0)
+		return 1;
+	return 0;
+}
+
+//Returns the size of the Stack
+int Stack_size(Stack *s) {
+	return (s->logical_length);
+
+}
 

@@ -6,7 +6,7 @@ typedef struct{
 	void *queues;//array of queue where elemenst will be stored
 	int alloc_len;// total size size of array  array of queue
 	int logical_len;//total size occupied by the array of queue
-	int size;//Specifying type ex:int,float,char
+	unsigned short size;//Specifying type ex:int,float,char
 	void *front;//Will point to the starting address of front element
 	void *rear;//Will point to the starting address of rear element
 }Queue;
@@ -16,10 +16,10 @@ typedef struct{
  * len:Total length to be allocated or size of array (a[n])
  * size:size of the type such as int or float or char
  */
-void createQueue(Queue *q,const int len,const int size) {
+void createQueue(Queue *q,const int len, int size) {
 	q->logical_len = 0;
 	q->alloc_len = len;
-	q->size = size;
+	q->size = (unsigned short)size;
 	q->queues = malloc(q->alloc_len * q->size);//creating array or allocating memory of the allocated size
 	assert(q->queues != NULL);
 	q->front = NULL;
