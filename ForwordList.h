@@ -5,29 +5,18 @@
 };
 //Construct for the linked list
 typedef struct{
-	int size; //dataype size
+	unsigned short size; //dataype size
 	int count;//counting the element in the list
 	struct node *head;//head of the linked list
 }LinkedList;
 
-void createList(LinkedList *,int );
-void append(LinkedList *,void *);
-void addafter(LinkedList *,int,void *);
-void addbeg(LinkedList *,void *);
-struct node * head(LinkedList *);
-void del(LinkedList *,void *);
-void arrange(LinkedList *);
-void reverse(LinkedList *);
-int isPresent(LinkedList *,void *data);
-struct node* find(LinkedList *,void *);
-void merge(LinkedList *,LinkedList *,LinkedList *);
 
 static int compare(void  *first,void *second,int size) {
 	return memcmp(first,second,size);
 
 }
 
-void dispose(LinkedList *list) {
+void Llist_dispose(LinkedList *list) {
 	struct node *temp = (list->head);
 	while(temp != NULL) {
 		struct node *del_node = temp;
@@ -38,7 +27,7 @@ void dispose(LinkedList *list) {
 	list->head = NULL;
 }
 
-int isEmpty(LinkedList *list){
+int Llist_isEmpty(LinkedList *list){
 	if(list->count == 0)
 		return 1;
 	return 0;
@@ -53,7 +42,7 @@ void static swap(struct node *prev,struct node *after,int size) {
 	memcpy(after->data,temp,size);
 }
 
- int length(LinkedList *list){
+ int Llist_length(LinkedList *list){
 	return list->count;
 }
 
@@ -70,13 +59,13 @@ static struct node* search(struct node **walk,int size,void *data){
 	return NULL;
 }
 //Creating a linked list
-void createList(LinkedList *list,int type) {
+void Llist_create(LinkedList *list,int type) {
 	list->size = type;
 	list->count = 0;
 	list->head = NULL;
 }
 //add the elment to the specified linked list
-void append(LinkedList *list,void *data){
+void Llist_push(LinkedList *list,void *data){
 	struct node *attach = malloc(sizeof(struct node));
 	attach->data  = malloc(list->size);
 	memcpy(attach->data,data,list->size);
@@ -94,12 +83,51 @@ void append(LinkedList *list,void *data){
 	return;
 
 }
+void static del(LinkedList *list,struct node **temp){
+	if(*temp == list->head){
+		struct node *del_node = *temp;
+		list->head = (*temp)->next;
+		free(del_node->data); //Releasing the memory of the elemnt which is in the node
+		free(del_node);// releading the node
+		list->count--;//decrementing the count
+		return ;
+	}
+	struct node *del_node = (*temp)->next;
+	(*temp)->next = ((*temp)->next)->next;
+	free(del_node->data);
+	free(del_node);
+	list->count--;
 
-struct node * head(LinkedList *list) {
+}
+void Llist_del(LinkedList *list,void *data) {
+	if(list->count == 0){
+		printf("List is empty\n");
+		return;
+	}
+	struct node *temp = search(&(list->head),list->size,data);
+	if(temp == NULL) {
+		printf("Element not found\n");
+		return;
+	}
+	del(list,&temp);
+}
+
+void Llist_pop(LinkedList *list,void *data) {
+	if(list->count == 0){
+		printf("\nList is empty\n");
+		return;
+
+	}
+	memcpy(data,(list->head)->data,list->size);
+	del(list,&(list->head));
+
+}
+
+void* Llist_head(LinkedList *list) {
 	return list->head;
 }
 
-void addbeg(LinkedList *list,void *data) {
+void Llist_push_front(LinkedList *list,void *data) {
 	struct node *attach = malloc(sizeof(struct node));
 	attach->data = malloc(list->size);
 	memcpy(attach->data,data,list->size);
@@ -109,7 +137,7 @@ void addbeg(LinkedList *list,void *data) {
 
 }
 
-void addafter(LinkedList *list,int loc,void *data) {
+void Llist_insert_after(LinkedList *list,const int loc,void *data) {
 	//return if the element count of the linked list is smaller then the specified location
 	if(list->count < loc) {
 		printf("List element are less than the specifed location");
@@ -126,40 +154,14 @@ void addafter(LinkedList *list,int loc,void *data) {
 	list->count++; //incrementing list count after every addition of linked list
 }
 
-void del(LinkedList *list,void *data) {
-	if(list->count == 0){
-		printf("List is empty\n");
-		return;
-	}
-	struct node *temp = search(&(list->head),list->size,data);
-	if(temp == NULL) {
-		printf("Element not found\n");
-		return;
-	}
-	if(temp == list->head){
-		struct node *del_node = temp;
-		list->head = temp->next;
-		free(del_node->data); //Releasing the memory of the elemnt which is in the node
-		free(del_node);// releading the node
-		list->count--;//decrementing the count
-		return ;
-	}
-	struct node *del_node = temp->next;
-	temp->next = (temp->next)->next;
-	free(del_node->data);
-	free(del_node);
-	list->count--;
-
-
-}
-
-void arrange(LinkedList *list) {
-	int len = length(list);
+//Sorts the linked list in ascending order
+void Llist_sort(LinkedList *list) {
+	int len = Llist_length(list);
 	const int size = list->size;
 	for(int i = 0; i<len-1 ;i++) {
 	struct node *trav = list->head;
 		for(int j = 0; j < len -1 ; j++) {
-			if(memcmp(trav->data,((trav)->next)->data,size) > 0) {
+			if(compare(trav->data,((trav)->next)->data,size) > 0) {
 				swap(trav,trav->next,size);
 			}
 		trav = trav->next;
@@ -167,9 +169,8 @@ void arrange(LinkedList *list) {
 	}
 }
 	
-
-
-void reverse(LinkedList *list) {
+//Reverse the content of stirng using stack.h header
+void Llist_reverse(LinkedList *list) {
 	Stack st;
 	StackNew(&st,list->size,NULL);
 	struct node *trav = list->head;
@@ -184,17 +185,17 @@ void reverse(LinkedList *list) {
 	}
 }
 
-int isPresent(LinkedList *list,void *data) {
+/*Return 1(i.e ture) if data is present or 0(false) is not*/
+int Llist_isPresent(LinkedList *list,void *data) {
 	struct node *temp = search(&(list->head),list->size,data);
 	if(temp != NULL)
 		return 1;
 	else
 		return 0;
-
-
 }
-
-struct node* find(LinkedList *list,void *data) {
+/*Returns a pointer to a node containing the specified data if not present in
+the linked list it returns NULL*/
+void* Llist_find(LinkedList *list,void *data) {
 	struct node *temp = search(&(list->head),list->size,data);
 	if(temp == NULL){
 		printf("Element not present\n");
@@ -203,38 +204,56 @@ struct node* find(LinkedList *list,void *data) {
 	return temp->data;
 }
 
-
-void merge(LinkedList *first,LinkedList *second,LinkedList *third) {
+/*Merges the first two list into the third one
+ * the data in the third list are such that there are no duplicate data
+ * form both list */
+void Llist_merge(LinkedList *first,LinkedList *second,LinkedList *third) {
 	struct node *fpt = first->head;
 	struct node *spt = second->head;
 	int size = first->size;
 	if(first->count > second->count) {
 		while(fpt != NULL) {
-				append(third,fpt->data);
+				Llist_push(third,fpt->data);
 				fpt = fpt->next;
 		}
 		while(spt != NULL) {
-			if(isPresent(third,spt->data))
+			if(Llist_isPresent(third,spt->data)) //if data is present it skip the node 
 				spt = spt->next;
 			else {
-				append(third,spt->data);
+				Llist_push(third,spt->data);//else if push the node
 				spt = spt->next;
 			}
 		}
 	}
 	else {
 		while(spt != NULL) {
-				append(third,spt->data);
+				Llist_push(third,spt->data);
 				spt = spt->next;
 		}
 		while(fpt != NULL) {
-			if(isPresent(third,fpt->data))
+			if(Llist_isPresent(third,fpt->data))
 				fpt = fpt->next;
 			else {
-				append(third,fpt->data);
+				Llist_push(third,fpt->data);
 				fpt = fpt->next;
 			}
 		}
 	}
 
+}
+
+/*This method sort the elemet of the list and removes all duplicated elements from the list */
+void Llist_unique( LinkedList *list) {
+	Llist_sort(list);
+	struct node **walk = &(list->head);
+	while((*walk)!= NULL) {
+		while((*walk)->next != NULL && compare((*walk)->data,((*walk)->next)->data,list->size) == 0)
+			del(list,&(*walk));
+		walk = &((*walk)->next);
+	}
+	
+}
+
+void* head(LinkedList *list) {
+	return(list->head);
 }
