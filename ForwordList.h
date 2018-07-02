@@ -14,6 +14,7 @@ typedef struct{
 	void (*freefn)(void *); /*This function will point to the function where it is writtern
 	how dat should be freed by default it will default_cmp for datatype like float,int,double
 	if you are storing strings you have to point it to string_free when witing funtion Llist_create*/
+	struct node* iterator;
 }LinkedList;
 
 
@@ -103,6 +104,7 @@ void Llist_create(LinkedList *list,int type,int (*compare)(void *first,void *sec
 		list->freefn = default_freefn;
 	else
 		list->freefn = freefn;
+	list->iterator = list->head;
 }
 //add the elment to the specified linked list
 void Llist_push(LinkedList *list,void *data){
@@ -238,6 +240,8 @@ void Llist_reverse(LinkedList *list) {
 
 /*Return 1(i.e ture) if data is present or 0(false) is not*/
 int Llist_isPresent(LinkedList *list,void *data) {
+	if(list->count == 0)
+		return 0;
 	struct node *temp = search(list,list->size,data);
 	if(temp != NULL)
 		return 1;
@@ -361,3 +365,14 @@ void Llist_copy(LinkedList *original,LinkedList *copy) {
 	}
 }
 
+int hasNext(LinkedList *list,void *data) {
+	if(list->iterator != NULL) {
+		memcpy(data,(list->iterator)->data,list->size);
+		list->iterator = ((list->iterator)->next);
+		return 1;
+	}
+	else {
+		list->iterator = list->head;
+		return 0;
+	}
+}
