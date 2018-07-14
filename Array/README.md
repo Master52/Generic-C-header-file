@@ -30,10 +30,10 @@ For example:
 This function will return the pointer Array or NULL if failed to allocate memory
 ```Array_create``` takes three argument :
 * First the size of the data type.
-* Second is the comparision function.If your data type is float,double,int,char write NULL
-or if it is of type String or any other structure provide a comparision function
-* Similary the third argument is also a pointer to function which points to free funtion for
-freeing the memory wirte NULL if your data type is of int,double,float,char or else provide
+* Second is the comparision function.If your data type is float,double,int,char, write NULL
+or if it is of type String or any other structure provide a comparision function.
+* Similary the third argument is also a pointer to function which points to free function for
+releasing the memory write NULL if your data type is of int,double,float,char, or else provide
 a free function.
 
 ### Deleting Array
@@ -99,4 +99,4 @@ Array_sort(Array *foo);
 ```c
 Array_isPresent(Array *foo,ArrayValue data);
 /*it return 1 if the element is present else return 0 */
-//Retrieving```
+```
