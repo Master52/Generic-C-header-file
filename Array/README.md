@@ -1,10 +1,10 @@
-##Dynamic Array in C
+## Dynamic Array in C
 
 
-##Usage
+## Usage
 This header file is an implementation of Dynamic Array
 
-###Data structure
+### Data structure
 Array represent following data structure:
 
 ```c
@@ -20,9 +20,9 @@ Array represent following data structure:
 
 typedef struct _Array Array;
 ```
-##Working with Data Structure
+## Working with Data Structure
 
-###Creating Array
+### Creating Array
 For creating an Array use ```Array_create``` function.
 For example:
 
@@ -36,12 +36,12 @@ or if it is of type String or any other structure provide a comparision function
 freeing the memory wirte NULL if your data type is of int,double,float,char or else provide
 a free function.
 
-###Deleting Array
+### Deleting Array
 For Deleting the Array object ```Array_dispose``` function
 For example:
 ```Array_dispose(foo);```
 
-###Adding 
+### Adding 
 For Adding an element in the Array use ```Array_add```function
 For example:
 ```c
@@ -50,14 +50,14 @@ Array_add(foo,&data);
 ```
 This will add the element at the end of the Array
 
-###Removing
+### Removing
 For removing an element from the Array use ```Array_remove```funtion.
 For example:
 ```c
 int data = 10;
 Array_remove(foo,&data);
 ```
-###Getting Value
+### Getting Value
 For getting the value from a particular index use ```Array_at``` fucntion.
 ```c
 int data = (int)Array_at(foo,1);
@@ -65,7 +65,7 @@ int data = (int)Array_at(foo,1);
 Here the second parameter is the index.
 Remember to typcast as it will return pointer to void*.
 
-##Additional Function
+## Additional Function
 ```c
 Array_add_at(Array *foo,int index,ArrayValue data);
 /*Puts the element in particular index*/
