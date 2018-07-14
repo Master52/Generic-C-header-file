@@ -29,10 +29,10 @@ For example:
 ```Array *foo = Array_create(sizeof(int),NULL,NULL);```
 This function will return the pointer Array or NULL if failed to allocate memory
 ```Array_create``` takes three argument :
-*First the size of the data type
-*Second is the comparision function.If your data type is float,double,int,char write NULL
+* First the size of the data type.
+* Second is the comparision function.If your data type is float,double,int,char write NULL
 or if it is of type String or any other structure provide a comparision function
-*Similary the third argument is also a pointer to function which points to free funtion for
+* Similary the third argument is also a pointer to function which points to free funtion for
 freeing the memory wirte NULL if your data type is of int,double,float,char or else provide
 a free function.
 
@@ -57,7 +57,7 @@ For example:
 int data = 10;
 Array_remove(foo,&data);
 ```
-### Getting Value
+### Retrieving Value
 For getting the value from a particular index use ```Array_at``` fucntion.
 ```c
 int data = (int)Array_at(foo,1);
@@ -99,8 +99,4 @@ Array_sort(Array *foo);
 ```c
 Array_isPresent(Array *foo,ArrayValue data);
 /*it return 1 if the element is present else return 0 */
-```
-
-
-
-
+//Retrieving```
