@@ -1,4 +1,5 @@
 /* Generic representation of Array */
+//
 
 typedef struct {
 	void *array;
