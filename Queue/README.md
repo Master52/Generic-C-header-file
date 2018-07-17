@@ -76,11 +76,7 @@ int data = *(int*)Queue_pop(foo);
 Here it will return the front element of the Queue and also delete it form the list.
 
 ## Additional Function
-```c
-Llist_insert_after(LinkedList *foo,const int loc, NodeValue data);
 
-/*Puts the element in particular location*/
-```
 ```c
 Queue_max(Queue *foo);
 
