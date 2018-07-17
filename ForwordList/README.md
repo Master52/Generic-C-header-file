@@ -55,7 +55,7 @@ For creating an LinkedList use ```Llist_create``` function.
 For example:
 
 ```LinkedList *foo = Llist_create(sizeof(int),NULL,NULL);```
-This function will return the pointer Array or NULL if failed to allocate memory
+This function will return the pointer LinkedList or NULL if failed to allocate memory
 ```Llist_create``` takes three argument :
 * First the size of the data type.
 * Second is the comparision function.If your data type is float,double,int,char, write NULL
@@ -64,7 +64,7 @@ or if it is of type String or any other structure provide a comparision function
 releasing the memory write NULL if your data type is of int,double,float,char, or else provide
 a free function.
 
-### Deleting Array
+### Deleting LinkedList
 For Deleting the Linked list object ```Llist_dispose``` function
 For example:
 ```Llist_dispose(foo);```

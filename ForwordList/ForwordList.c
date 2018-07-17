@@ -1,6 +1,5 @@
 #include<stdlib.h>
 #include<string.h>
-#include <assert.h>
 #include "../Stack/Stack.h"
 #include "ForwordList.h"
 
@@ -30,6 +29,7 @@ void Llist_dispose(LinkedList *list) {
 	}
 	list->head = NULL;
 	list->count = 0;
+	free(list);
 }
 
 int Llist_isEmpty(LinkedList *list){

@@ -2,23 +2,28 @@
 /* A Generic header of Queue
  */
 
-typedef struct{
+ struct _Queue{
 	void *queues;//array of queue where elemenst will be stored
 	int alloc_len;// total size size of array  array of queue
 	int logical_len;//total size occupied by the array of queue
-	unsigned short size;//Specifying type ex:int,float,char
+	size_t size;//Specifying type ex:int,float,char
 	void *front;//Will point to the starting address of front element
 	void *rear;//Will point to the starting address of rear element
 	void (*freefn)(void *);
-}Queue;
+};
 
-static void default_freefn(void *data) {
+typedef struct _Queue Queue;
+
+typedef void* QueueValue;
+
+static void default_freefn(QueueValue data) {
 	free(data);
 }
 //Free the memory used by the queue or delete the element of the queue
 void Queue_dispose(Queue *q) {
 	q->logical_len = 0;
 	default_freefn(q->queues);
+	free(q);
 }
 
 /*@createQueue is just like constructor with paramenter,
@@ -26,40 +31,52 @@ void Queue_dispose(Queue *q) {
  * len:Total length to be allocated or size of array (a[n])
  * size:size of the type such as int or float or char
  */
-void createQueue(Queue *q,const int len, int size,void (*freefn)(void *data)) {
+Queue* Queue_create(const int len, int size,void (*freefn)(QueueValue data)) {
+	Queue *q = malloc(sizeof(Queue));
+	if(q == NULL)
+		return NULL;
 	q->logical_len = 0;
 	q->alloc_len = len;
-	q->size = (unsigned short)size;
+	q->size = size;
 	q->queues = malloc(q->alloc_len * q->size);//creating array or allocating memory of the allocated size
-	assert(q->queues != NULL);
+	if(q->queues == NULL)
+		return NULL;
 	q->front = NULL;
 	q->rear = NULL;
 	if(freefn == NULL)
 		freefn = default_freefn;
 	else
 		q->freefn = freefn;
+	return q;
 }
 
-static void Queue_grow(Queue *q) {
+static int Queue_grow(Queue *q) {
 	q->alloc_len *= 2;
 	q->queues = realloc(q->queues,q->alloc_len * q->size);
+	if(q->queues == NULL)
+		return 0;
+	return 1;
 }
 //@Queue_push push the data to the end of the queue
-void Queue_push(Queue *q,const void *data) {
+int Queue_push(Queue *q,const void *data) {
 	if(q->logical_len > q->alloc_len ) {
-		Queue_grow(q);
+		if(!Queue_grow(q))
+			return 0;
 	}
-	void *target = (char*)q->queues + q->logical_len * q->size;//creating the target array which will point to starting address of our data in the array of queue
+	QueueValue target = (char*)q->queues + q->logical_len * q->size;//creating the target array which will point to starting address of our data in the array of queue
 	memcpy(target,data,q->size);//copying the data
 	if(q->logical_len == 0) {
 		q->front = target;
 		q->rear = target;
 		q->logical_len ++;
+		return 1;
 	}
 	else  {
 		q->rear = target;//set rear pointer to point to the next element which is inserted in the queue i.e target
 		q->logical_len ++;
+		return 1;
 	}
+	return 0;
 
 }
 
@@ -71,17 +88,15 @@ int Queue_isEmpty(const Queue *q) {
 }
 
 //@Queue_pop pop the data oldest the data from the queue which is pointed by front
-//data:is the varaible type passed by the user to replicate the data is the data variable
 //Note:Queue_pop does not remove the data form the memory location ,therefore you should call mannually Queue_dispose() to free the memory allocated to the queue 
-void Queue_pop(Queue *q,void *data) {
+QueueValue Queue_pop(Queue *q) {
 	if(Queue_isEmpty(q)) {
-		printf("Queue is Empty\n");
-		return;
+		return NULL;
 	}
-	void *source = q->front;
+	QueueValue source = q->front;
 	q->front = (char*)q->front + q->size;
 	q->logical_len--;
-	memcpy(data,source,q->size);
+	return source;
 }
 
 
@@ -95,25 +110,16 @@ int Queue_size(const Queue *q){
 	return q->logical_len;
 }
 //Access the oldest element in the queue ,it does not delete the element in the queue
-void Queue_front(const Queue *q,void *data) {
-	memcpy(data,q->front,q->size);
+QueueValue Queue_front(const Queue *q) {
+	return q->front;;
 }
 
 //Access the last  element in the queue ,it does not delete the element in the queue
-void Queue_back(const Queue *q,void *data) {
-	memcpy(data,q->rear,q->size);
-}
-//return the return the starting address of front element of the queue
-void* Queue_f(const Queue *q){
-	return q->front;
-}
-
-//return the return the starting address of last element of the queue
-void* Queue_r(const Queue *q) {
+QueueValue Queue_back(const Queue *q) {
 	return q->rear;
 }
+
 //swap the two queue
-//Not prooper need improvement
 void Queue_swap(Queue *first,Queue *second) {
 	Queue *temp;
 	temp->logical_len = first->logical_len;
