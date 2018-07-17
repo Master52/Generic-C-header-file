@@ -1,4 +1,4 @@
-## Generic Queue in C
+# Generic Queue in C
 
 ## License
 
@@ -37,8 +37,6 @@ Queue represent following data structure:
 typedef struct _Queue Queue;
 
 typedef void* QueueValue;
-```
-
 ```
 ## Working with Data Structure
 
