@@ -2,69 +2,80 @@
 
 typedef struct{
 	void *ele_size; //pointing to array of stack
-	unsigned short size; //size of datatype
+	size_t size; //size of datatype
 	unsigned int logical_length; //Simlar to top
 	unsigned int allocate_length; //Total size of length
 	void (*freefn)(void *);
 }Stack;
 
-void StackNew(Stack *s,int size,void (*freefn)(void *));
-void StackDispose(Stack *s);
-void StackPush(Stack *s,const void *value);
-void StackPop(Stack *s,void *value);
+typedef void* StackValue;
+
+void StackNew(Stack *s,int size,void (*freefn)(StackValue));
+void Stack_dispose(Stack *s);
+int Stack_push(Stack *s,const StackValue data);
+StackValue StackPop(Stack *s);
 static void StringFree(void *elem);
 
 //static because can't be used in multiple file
-static void StackGrow(Stack *s) {
+static int StackGrow(Stack *s) {
 	s->allocate_length *= 2;
 	s->ele_size = realloc(s->ele_size,s->allocate_length * s->size);
+	if(s->ele_size == NULL)
+		return 0;
+	return 1;
 }
 
 
 //Initialization of Stack
-void StackNew(Stack *s,int size,void (*freefn)(void *)) {
-	assert(size > 0); //It's a macro for giving us line number where there is a null pointer problem
+Stack* Stack_create(int size,void (*freefn)(StackValue)) {
+	if(size < 0 )
+		return NULL;
+	Stack *s = malloc(sizeof(Stack));
 	s->logical_length = 0;
 	s->allocate_length = 4;
-	s->size =(unsigned short) size;
+	s->size = size;
 	s->ele_size = malloc(s->allocate_length * s->size);
-	assert(s->ele_size != NULL);
+	if(s->ele_size == NULL)
+		return NULL;
 	s->freefn = freefn;
 
 }
 
-void StackDispose(Stack *s) {
+void Stack_dispose(Stack *s) {
 	if(s->freefn != NULL)
 		for(int i = 0; i<s->logical_length; i++)
 			s->freefn((char*)s->ele_size + i * s->size);
 	free(s->ele_size); //Freeing the array of stack
+	free(s);
 }
 
-static void StringFree(void *elem) {
+static void StringFree(StackValue elem) {
 	free(*(char **)elem);
 }
 
 
-void StackPush(Stack *s,const void *value) {
+int Stack_push(Stack *s,const StackValue data) {
 	//Checking wether the top is at max location of array of stack
 	if(s->logical_length == s->allocate_length)
-		StackGrow(s);
+		if(!StackGrow(s))
+			return 0;
 	void *target = (char*)s->ele_size + s->logical_length * s -> size;
 	//Copies the bit of block of the memory
-	memcpy(target,value,s->size);
+	memcpy(target,data,s->size);
 	s->logical_length ++;
+	return 1;
 }
 
-void StackPop(Stack *s,void *value) {
+StackValue StackPop(Stack *s) {
 	//The reson for (char*) typcasting is void pointer cannot do arthimatic operation
 	//Giving the starting address of last emelent if ele_size
 	void *source = (char*)s->ele_size + (s->logical_length-1) * s->size;
-	memcpy(value,source,s->size);
 	s->logical_length --;
+	return source;
 }
 
 //Return a pointer which points to starting address of the top element
-void* Stack_top(Stack *s) {
+StackValue Stack_top(Stack *s) {
 	void *source = (char*)s->ele_size + (s->logical_length-1) * s->size;
 	return source;
 }
