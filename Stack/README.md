@@ -44,7 +44,7 @@ For example:
 ```Stack *foo = Stack_create(sizeof(int),NULL);```
 This function will return the pointer Stack or NULL if failed to allocate memory
 ```Stack_create``` takes two argument :
-*First size of data type.
+* First size of data type.
 * The Second argument is  a pointer to function which points to free function for
 releasing the memory write NULL if your data type is of int,double,float,char, or else provide
 a free function.
@@ -58,7 +58,7 @@ For example:
 For Adding an element in the Stack use ```Stack_push```function
 For example:
 ```c
-Stack *foo = Stack_create(10,sizeof(int),NULL);
+Stack *foo = Stack_create(sizeof(int),NULL);
 int data = 10;
 Stack_push(foo,&data);
 ```
