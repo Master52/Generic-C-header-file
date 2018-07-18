@@ -72,11 +72,7 @@ int data = *(int*)Stack_pop(foo);
 Here it will return the front element of the Stack.
 
 ## Additional Function
-```c
-Llist_insert_after(LinkedList *foo,const int loc, NodeValue data);
 
-/*Puts the element in particular location*/
-```
 ```c
 Stack_top(Stack *foo);
 
