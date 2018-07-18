@@ -41,7 +41,7 @@ typedef void* StackValue;
 For creating an Stack use ```Stack_create``` function.
 For example:
 
-```Stack *foo = Stack_create(sizeof(int),NULL);
+```Stack *foo = Stack_create(sizeof(int),NULL);```
 This function will return the pointer Stack or NULL if failed to allocate memory
 ```Stack_create``` takes two argument :
 *First size of data type.
