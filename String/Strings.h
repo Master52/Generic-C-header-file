@@ -112,28 +112,31 @@ void rsort(char *arr[],const int length) {
 		arr[j] = buf;
 	}
 }
+/*Return the character at particular index*/
 char charAt( char *str,int index){
 	return (*((char*)(str + index *sizeof(char))));
 }
 
+/*converts the String to lower */
 void strToLower(char *s) {
 	for(int i = 0,n = strlen(s); i < n; ++i) {
 		s[i] = tolower(s[i]);
 	}
 }
 
+/*converts the String to upper */
 void strToUpper(char *s) {
 	for(int i = 0,n = strlen(s); i < n; ++i) {
 		s[i] = toupper(s[i]);
 	}
 }
-
+/*Compare two String ignoring the cases*/
 int strcmpIgnoreCase(char *str1, char *str2) {
 	strToLower(str1);
 	strToLower(str2);
 	return strcmp(str1,str2);
 }
-
+/*checks a String if it starts with prefix at partiular offsets or not */
 int startsWith(const char *str,const char *prefix,int offset) {
 	for(int i = 0,n = strlen(prefix);i<n-1;++i) {
 		if(str[offset] != prefix[i])
@@ -142,6 +145,7 @@ int startsWith(const char *str,const char *prefix,int offset) {
 	}
 	return 1;
 }
+/*checks a String if it ends with prefix*/
 int endsWith(const char *str,const char *prefix) {
 	int len = strlen(prefix);
 	int offset = strlen(str) - len;
@@ -153,7 +157,7 @@ int endsWith(const char *str,const char *prefix) {
 	return 1;
 
 }
-
+/*find the index of a charater specified*/
 int indexOf(const char *str,char c,int offset) {
 	int i = offset;
 	while(str[i] != '\0') {
@@ -163,7 +167,7 @@ int indexOf(const char *str,char c,int offset) {
 	}
 	return -1;
 }
-
+/*same as index of but it start form the offset provided to the beginning of the String*/
 int lastindexOf(const char *str,char c,int offset) {
 	int i = offset;
 	while(str[i] != '\0' && i >= 0) {
@@ -173,7 +177,7 @@ int lastindexOf(const char *str,char c,int offset) {
 	}
 	return -1;
 }
-
+/*This function search the string form backword and return the index of the String when found*/
 int lastindexOfstr(const char *haystack,const char *needle) {
 	int i = 0;
 	int d = 0;
@@ -196,6 +200,7 @@ int lastindexOfstr(const char *haystack,const char *needle) {
 	}
 	printf("Haystack is smaller\n"); 
 }
+/*This function search the string form beginning and return the index of the String when found*/
 int indexOfstr(const char *haystack,const char *needle) {
 	int i = 0;
 	int d = 0;
@@ -219,7 +224,7 @@ int indexOfstr(const char *haystack,const char *needle) {
 	printf("Haystack is smaller\n"); 
 }
 
-
+/*Return a substring from index begin to end */
 char* substr(const char *str,int begin,int end) {
 	int len = 8;
 	char *sub_string = malloc(len);
@@ -236,7 +241,7 @@ char* substr(const char *str,int begin,int end) {
 	sub_string[begin] = '\0';
 	return sub_string;
 }
-
+/*Replaces a original string with str specified*/
 char* str_replace(char *str, char *orig, char *rep, int start)
 {
   static char temp[4096];
@@ -257,6 +262,7 @@ char* str_replace(char *str, char *orig, char *rep, int start)
   return str;
 }
 
+/*Replaces all the occurence of str from the target*/
 void str_replaceAll(char *target, const char *needle, const char *replacement)
 {
     char buffer[1024] = { 0 };
