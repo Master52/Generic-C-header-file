@@ -9,16 +9,18 @@ typedef void* HashTable;
 typedef void* HashValue;
 
 struct _HashMap {
-	size_t size;
+	size_t typesize;
 	void* table;
 	unsigned int primeIndex;
 	void (*freefn)(HashValue );
 	unsigned long (*hashFun)(char *);
+	unsigned int sizeOfHash;
 };
 
 typedef struct _HashMap HashMap;
 
 HashMap* Hash_create(size_t,void (*freefn)(HashValue ),unsigned long (*hashFun)(char*));
+int Hash_add(HashMap *,char* ,HashValue );
 
 /*TODO*/
 /*

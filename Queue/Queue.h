@@ -88,8 +88,7 @@ int Queue_isEmpty(const Queue *q) {
 }
 
 //@Queue_pop pop the data oldest the data from the queue which is pointed by front
-//Note:Queue_pop does not remove the data form the memory location ,therefore you should call mannually Queue_dispose() to free the memory allocated to the queue 
-QueueValue Queue_pop(Queue *q) {
+//Note:Queue_pop does not remove the data form the memory location ,therefore you should call mannually Queue_dispose() to free the memory allocated to the queue QueueValue Queue_pop(Queue *q) {
 	if(Queue_isEmpty(q)) {
 		return NULL;
 	}

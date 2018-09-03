@@ -26,6 +26,7 @@ static long long sdbm(char s[])
 static unsigned  long djb2(char s[])
 {
     long long hash = 5381; /* init value */
+//    long long hash = (long long)has;
     int i = 0;
     while (s[i] != '\0')
     {
@@ -74,22 +75,39 @@ static void default_freefn(HashValue data) {
 	free(data);
 }
 
-HashMap* Hash_create(size_t size,void (*freefn)(HashValue ),unsigned long (*hashFun)(char*)) {
+HashMap* Hash_create(size_t typesize,void (*freefn)(HashValue ),unsigned long (*hashFun)(char*)) {
 	HashMap *map = malloc(sizeof(HashMap));
 	if(map == NULL)
 		return NULL;
-	map->size = size;
+	map->typesize = typesize;
 	if((map->freefn = freefn) == NULL)
 		map->freefn = default_freefn;
 	if((map->hashFun = hashFun) == NULL)
 		map->hashFun = djb2;
 	map->primeIndex = 0;
-	map->table = calloc(hash_table_primes[map->primeIndex],map->size);
+	map->table = calloc(hash_table_primes[map->primeIndex],map->typesize);
 	if(map->table == NULL)
 		return NULL;
+	map->sizeOfHash = 0;
 	return map;
 
 }
 
+static HashMap* HashGrow(HashMap *map) {
+	if((map->primeIndex++ >= (sizeof(hash_table_primes)/sizeof(hash_table_primes[0]))))
+			return NULL;
+	else
+		return realloc(map->table,hash_table_primes[map->primeIndex] * map->typesize);
+}
+
+int Hash_add(HashMap *map,char* key,HashValue data) {
+	if(map->sizeOfHash >= hash_table_primes[map->primeIndex])
+		if(HashGrow(map) == NULL)
+			return -1;
+	unsigned int index = (map->hashFun(key) ) % hash_table_primes[map->primeIndex];
+	void* target = (char*)map->table + map->typesize * index;
+	memcpy(target,data,map->typesize);
+	return 1;
+}
 
 
